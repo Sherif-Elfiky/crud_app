@@ -10,13 +10,9 @@ app.use(express.urlencoded({ extended: true }));
 
 
 const pool = new Pool({
-  user: 'sherifelfiky',
-  host: 'localhost',
-  database: 'tracker',
-  password: '',
-  port: 5432
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 });
-
 
 app.get('/jobs', async (req, res) => {
   const result = await pool.query('SELECT * FROM jobs');
@@ -127,6 +123,7 @@ app.post('/jobs/update', async (req, res) => {
 
 
 
-app.listen(3000, () => {
-  console.log('Server running at http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
